@@ -3,15 +3,15 @@ Pywalblur
 
 Blur your background on window open
 
-![](https://github.com/Di-KaZ/Dotfiles/blob/master/screenshot/n1.png?raw=true)
+![](https://github.com/Di-KaZ/Dotfiles/blob/master/preview.gif)
 
 Dependencies
 ------------
 
-- Your window manager have to be [EWMH]() compliant for this to work.
-- [hsetroot]()
-- [wmctrl]()
-- [imagemagick]()
+- Your window manager have to be [EWMH](https://en.wikipedia.org/wiki/Extended_Window_Manager_Hints) compliant for this to work.
+- [hsetroot](https://github.com/himdel/hsetroot)
+- [wmctrl](https://github.com/Conservatory/wmctrl)
+- [imagemagick](https://github.com/ImageMagick/ImageMagick)
 
 Options
 -------

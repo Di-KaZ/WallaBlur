@@ -10,22 +10,12 @@ from subprocess import DEVNULL, STDOUT, check_call
 const_cachedir = os.getenv("HOME") + "/.cache/pywalblur"
 
 # functions
-
 def get_current_workspace():
     return os.popen("xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'").read()
 
 
 def get_window_number(workspace):
     return os.popen(f"echo \"$(wmctrl -l)\" | awk -F\" \" \'{{print $2}}\' | grep -e {workspace}").read().count('\n')
-
-def limits_refresh(arg):
-    try:
-        f = float(arg)
-    except ValueError:
-        raise argparse.ArgumentTypeError("Must be a floating point number")
-    if f < 0 or f > 1:
-        raise argparse.ArgumentTypeError("Argument must be 0 > [val] < 1 ")
-    return f
 
 def delete_wallpaper_cache(arg):
     filename = os.path.splitext(os.path.basename(arg))[0]
@@ -59,7 +49,30 @@ def create_cache_all(arg):
         create_cache(arg + file)
     print("Finished processing %s\n" %(arg) if not args.quiet else '', end='')
 
+def limits_refresh(arg):
+    try:
+        f = float(arg)
+    except ValueError:
+        raise argparse.ArgumentTypeError("Must be a floating point number")
+    if f < 0 or f > 1:
+        raise argparse.ArgumentTypeError("Argument must be 0 > [val] < 1 ")
+    return f
+
+# Parser
+parser = argparse.ArgumentParser(description="Blur wallpaper on window open.")
+parser.add_argument('-r', '--refresh-rate', type=limits_refresh, metavar='', default=0.3, help="interval of check")
+parser.add_argument('-q', '--quiet', action='store_true', help="no print")
+parser.add_argument('-a', '--animation', action='store_true', help="add 'animation'(experimental)")
+bluring_grp = parser.add_mutually_exclusive_group()
+bluring_grp.add_argument('-c', '--create-cache', type=str, metavar='',default="<none>", help="create cleacache without launching")
+bluring_grp.add_argument('-G', '--create-cache-all', type=create_cache_all, metavar='', help="create cache for every file in dit")
+bluring_grp.add_argument('-w', '--wallpaper', type=str, default="<none>", metavar='', help="wallpaper path")
+bluring_grp.add_argument('-g', '--wallpapergif', type=str, default="<none>", metavar='', help="wallpaper path as gif(not yet implemented)")
+bluring_grp.add_argument('-d', '--delete', type=delete_wallpaper_cache, metavar='', help="delete cached wallpaper corresponding to path")
+bluring_grp.add_argument('-C', '--clear', action='store_true', help="clear all cached wallpaper")
+
 def create_cache(filepath):
+    print(filepath)
     blur_step = ["2", "5", "8", "10"]
     filename = os.path.splitext(os.path.basename(filepath))[0]
     print("Generating cache for %s, this may take some time...\n" % (filepath) if not args.quiet else '', end='')
@@ -76,6 +89,7 @@ def create_cache(filepath):
         print("generating frame 5/5...\n" if not args.quiet else '', end='')
         check_call(["convert", "-scale","10%", "-blur", "0x2", "-resize", "1000%", filepath, const_cachedir + "/" + filename + "/" + filename + "5.png"], stdout=DEVNULL, stderr=STDOUT)
     print("Finished generating cache for %s\n" % (filepath) if not args.quiet else '', end='')
+
 
 # # # # # Bluring section # # # # #
 
@@ -111,24 +125,13 @@ def loop_blur_w(wallpaper_path, sleeptime, animation):
 
 # # # # # Bluring section # # # # #
 
-# Parser
-parser = argparse.ArgumentParser(description="Blur wallpaper on window open.")
-parser.add_argument('-r', '--refresh-rate', type=limits_refresh, metavar='', default=0.3, help="interval of check")
-parser.add_argument('-q', '--quiet', action='store_true', help="no print")
-parser.add_argument('-a', '--animation', action='store_true', help="add 'animation'(experimental)")
-bluring_grp = parser.add_mutually_exclusive_group()
-bluring_grp.add_argument('-c', '--create-cache', type=create_cache, metavar='', help="create cache without launching")
-bluring_grp.add_argument('-G', '--create-cache-all', type=create_cache_all, metavar='', help="create cache for every file in dit")
-bluring_grp.add_argument('-w', '--wallpaper', type=str, default="<none>", metavar='', help="wallpaper path")
-bluring_grp.add_argument('-g', '--wallpapergif', type=str, default="<none>", metavar='', help="wallpaper path as gif(not yet implemented)")
-bluring_grp.add_argument('-d', '--delete', type=delete_wallpaper_cache, metavar='', help="delete cached wallpaper corresponding to path")
-bluring_grp.add_argument('-C', '--clear', action='store_true', help="clear all cached wallpaper")
-
 if len(sys.argv[1:]) == 0:
     parser.print_usage()
     parser.exit()
 
 args = parser.parse_args()
+
+print(args)
 
 if __name__ == "__main__":
     if not os.path.exists(const_cachedir):
@@ -136,6 +139,9 @@ if __name__ == "__main__":
         print("Created cache directory in \'%s\'\n" % (const_cachedir) if not args.quiet else '', end='')
     if args.clear:
         clear_cache()
+        exit(0)
+    if args.create_cache != "<none>":
+        create_cache(args.create_cache)
         exit(0)
     if args.wallpaper != "<none>":
         create_cache(args.wallpaper)
