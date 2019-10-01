@@ -81,6 +81,12 @@ def clear_cache():
     else:
         print("Aborting.")
 
+def create_cache_all(arg):
+    print("WARNING THIS MAY TAKE SOME TIME...")
+    files = os.listdir(arg)
+    for file in files:
+        create_cache(arg + "/" + file)
+
 def create_cache(filepath):
     blur_step = ["2", "5", "8", "10"]
     filename = os.path.splitext(os.path.basename(filepath))[0]
@@ -103,9 +109,10 @@ def create_cache(filepath):
 parser = argparse.ArgumentParser(description="Blur wallpaper on window open.")
 parser.add_argument('-r', '--refresh-rate', type=limits_refresh, default=0.3, help="interval of check")
 parser.add_argument('-q', '--quiet', action='store_true', help="no print")
-parser.add_argument('-c', '--create-cache', type=create_cache, help="create cache without launching")
 parser.add_argument('-a', '--animation', action='store_true', help="add 'animation'(experimental)")
 bluring_grp = parser.add_mutually_exclusive_group()
+bluring_grp.add_argument('-c', '--create-cache', type=create_cache, help="create cache without launching")
+bluring_grp.add_argument('-G', '--create-cache-all', type=create_cache_all, help="create cache for every file in dit")
 bluring_grp.add_argument('-w', '--wallpaper', type=str, default="<none>", help="wallpaper path")
 bluring_grp.add_argument('-g', '--wallpapergif', type=str, default="<none>", help="wallpaper path as gif(not yet implemented)")
 bluring_grp.add_argument('-d', '--delete', type=delete_wallpaper_cache, help="delete cached wallpaper corresponding to path")
