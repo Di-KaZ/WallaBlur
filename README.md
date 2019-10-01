@@ -13,6 +13,15 @@ Dependencies
 - [wmctrl](https://github.com/Conservatory/wmctrl)
 - [imagemagick](https://github.com/ImageMagick/ImageMagick)
 
+Installing
+----------
+
+Simply run pywalblur.sh or install in your path with
+
+```bash
+make install
+```
+
 Options
 -------
 
