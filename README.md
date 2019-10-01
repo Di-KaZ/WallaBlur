@@ -3,7 +3,7 @@ Pywalblur
 
 Blur your background on window open
 
-![](https://github.com/Di-KaZ/Dotfiles/blob/master/preview.gif)
+![](https://github.com/Di-KaZ/Dotfiles/blob/master/demo.gif)
 
 Dependencies
 ------------

@@ -131,8 +131,6 @@ if len(sys.argv[1:]) == 0:
 
 args = parser.parse_args()
 
-print(args)
-
 if __name__ == "__main__":
     if not os.path.exists(const_cachedir):
         os.mkdir(const_cachedir)
