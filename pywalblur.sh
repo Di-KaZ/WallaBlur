@@ -84,8 +84,10 @@ def clear_cache():
 def create_cache_all(arg):
     print("WARNING THIS MAY TAKE SOME TIME...")
     files = os.listdir(arg)
-    for file in files:
-        create_cache(arg + "/" + file)
+    length = len(files)
+    for i, file in enumerate(files, 1):
+        print("file %d/%d" %(i, length))
+        create_cache(arg + file)
 
 def create_cache(filepath):
     blur_step = ["2", "5", "8", "10"]
