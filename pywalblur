@@ -77,7 +77,6 @@ def get_file_extention(filepath):
 
 
 def create_cache_gif(filepath, filename):
-    print("gif mode")
     if os.path.exists(const_cachedir + "/" + filename):
         print("Cache for \'%s\' aleready exist\n" % (const_cachedir + "/" + filename) if not args.quiet else '', end='')
         return
@@ -89,7 +88,6 @@ def create_cache_gif(filepath, filename):
 
 
 def create_cache_non_gif(filepath, filename):
-    print("image mode")
     blur_step = ["2", "5", "8", "10"]
     print("Generating cache for %s\n" % (filepath) if not args.quiet else '', end='')
     if os.path.exists(const_cachedir + "/" + filename):
@@ -190,18 +188,18 @@ if __name__ == "__main__":
         exit(0)
     if args.create_cache_dir != None:
         create_cache_all(args.create_cache_dir, args.quiet)
-    # get screen resolution
-    cmd = ['xrandr']
-    cmd2 = ['grep', '*']
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
-    p.stdout.close()
-    resolution_string, junk = p2.communicate()
-    resolution = resolution_string.split()[0]
-    width, height = resolution.split(b'x')
-    width = codecs.decode(width, encoding='utf-8')
-    height = codecs.decode(height, encoding='utf-8')
     if args.wallpaper != None:
+        # get screen resolution
+        cmd = ['xrandr']
+        cmd2 = ['grep', '*']
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
+        p.stdout.close()
+        resolution_string, junk = p2.communicate()
+        resolution = resolution_string.split()[0]
+        width, height = resolution.split(b'x')
+        width = codecs.decode(width, encoding='utf-8')
+        height = codecs.decode(height, encoding='utf-8')
         create_cache(args.wallpaper)
         loop_blur(args.wallpaper, args.refresh_rate, args.animation, get_file_extention(args.wallpaper))
     else:
