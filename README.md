@@ -1,7 +1,7 @@
 Pywalblur
 =========
 
-Blur your background on window open
+Blur your background on window open (and gif background too !)
 
 ![](https://github.com/Di-KaZ/pywalblur/blob/master/demo.gif)
 
