@@ -128,6 +128,7 @@ def anim_unblur_w(walls_path, wallpaper_path, animation):
 def loop_blur_w(wallpaper_path, sleeptime, animation):
     blured = False
     walls_path = const_cachedir + "/" + os.path.splitext(os.path.basename(wallpaper_path))[0]
+    subprocess.check_call(["hsetroot", "-cover", walls_path + "/" + os.path.splitext(os.path.basename(wallpaper_path))[0] + "0.png"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     while True:
         window_open = get_window_number(get_current_workspace())
         if window_open:
@@ -143,7 +144,7 @@ def loop_blur_w(wallpaper_path, sleeptime, animation):
 def loop_blur_g(wallpaper_path, sleeptime, animation):
     blured = False
     walls_path = const_cachedir + "/" + os.path.splitext(os.path.basename(wallpaper_path))[0]
-    proc = None
+    proc = subprocess.Popen("xwinwrap -ov -g %sx%s+0+0 -- mpv -wid WID %s --no-osc --no-osd-bar --loop-file --player-operation-mode=cplayer --no-audio --panscan=1.0 --no-input-default-bindings" %(width, height, wallpaper_path), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     if animation:
         proc = subprocess.Popen("xwinwrap -ov -g %sx%s+0+0 -- mpv -wid WID %s --no-osc --no-osd-bar --loop-file --player-operation-mode=cplayer --no-audio --panscan=1.0 --no-input-default-bindings" %(width, height, wallpaper_path), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         exit(0)
