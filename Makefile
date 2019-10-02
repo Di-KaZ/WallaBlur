@@ -1,4 +1,4 @@
 install:
-	cp pywalblur /usr/bin/pywalblur
+	@cp pywalblur /usr/bin/pywalblur
 
 .PHONY: install all
