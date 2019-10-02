@@ -10,10 +10,7 @@ import signal
 import codecs
 
 
-# /!\ It shurely a mess but it's my first time with python any advice would be welcome
-
-# Constant
-const_cachedir = os.getenv("HOME") + "/.cache/pywalblur"
+# /!\ It surely a mess but it's my first time with python any advice would be welcome :)
 
 def get_current_workspace():
     return os.popen("xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'").read()
@@ -44,7 +41,7 @@ def remove_all_cache():
     else:
         print("Aborting.")
 
-def create_cache_all(arg):
+def create_cache_all(arg, quiet):
     print("WARNING THIS MAY TAKE SOME TIME...\n" if not args.quiet else '', end='')
     files = os.listdir(arg)
     length = len(files)
@@ -69,7 +66,7 @@ parser.add_argument('-q', '--quiet', action='store_true', help="no print")
 parser.add_argument('-a', '--animation', action='store_true', help="add 'animation' (experimental) / deactivate blur on gifs")
 bluring_grp = parser.add_mutually_exclusive_group()
 bluring_grp.add_argument('-c', '--create-cache', type=str, metavar='',default=None, help="create cleacache without launching")
-bluring_grp.add_argument('-C', '--create-cache-dir', type=create_cache_all, metavar='', help="create cache for every file in dit")
+bluring_grp.add_argument('-C', '--create-cache-dir', type=str, metavar='', help="create cache for every file in dit")
 bluring_grp.add_argument('-w', '--wallpaper', type=str, default=None, metavar='', help="wallpaper path(gif still experimental)")
 bluring_grp.add_argument('-r', '--remove', type=delete_wallpaper_cache, metavar='', help="remove cached wallpaper corresponding to path")
 bluring_grp.add_argument('-R', '--remove-all', action='store_true', help="remove all cached wallpaper")
@@ -172,6 +169,8 @@ def loop_blur(wallpaper_path, sleeptime, animation, extention):
     else:
         loop_blur_g(wallpaper_path, sleeptime, animation)
 
+const_cachedir = os.getenv("HOME") + "/.cache/pywalblur"
+
 # if no arg just print help
 if len(sys.argv[1:]) == 0:
     parser.print_usage()
@@ -189,6 +188,8 @@ if __name__ == "__main__":
     if args.create_cache != None:
         create_cache(args.create_cache)
         exit(0)
+    if args.create_cache_dir != None:
+        create_cache_all(args.create_cache_dir, args.quiet)
     # get screen resolution
     cmd = ['xrandr']
     cmd2 = ['grep', '*']
