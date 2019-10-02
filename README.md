@@ -42,7 +42,7 @@ Here is the list of avalible options:
 |  -q   | --quiet            | no print                                               |
 |  -a   | --animation        | add 'animation'(experimental) / deactivate blur on gif |
 |  -c   | --create-cache     | create cache without launching                         |
-|  -C   | --create-cache-dir | create cache for every file in dit                     |
+|  -C   | --create-cache-dir | create cache for every file in dir                     |
 |  -w   | --wallpaper        | wallpaper path                                         |
 |  -r   | --remove           | remove cached wallpaper corresponding to path          |
 |  -R   | --remove-all       | remove all cached wallpaper                            |
