@@ -16,6 +16,8 @@ Required :
 
 For png, jpg, ect:
 - [hsetroot](https://github.com/himdel/hsetroot)
+or
+- [feh](https://github.com/derf/feh)
 
 For gifs:
 - [xwinwrap](https://github.com/ujjwal96/xwinwrap)
@@ -26,6 +28,8 @@ Installing
 After installing all the dependencies, simply run pywalblur or install in your path with
 
 ```bash
+pip install ewmh
+python3 -m pip install Xlib
 git clone https://github.com/Di-KaZ/pywalblur.git
 cd pywalblur
 make install
@@ -36,14 +40,16 @@ Options
 
 Here is the list of avalible options:
 
-| short | long               | description                                            |
-| :---: | :----------------: | :-------------------------------------------:          |
-|  -h   | --help             | show this help message and exit                        |
-|  -s   | --refresh-rate     | interval of check                                      |
-|  -q   | --quiet            | no print                                               |
-|  -a   | --animation        | add 'animation'(experimental) / deactivate blur on gif |
-|  -c   | --create-cache     | create cache without launching                         |
-|  -C   | --create-cache-dir | create cache for every file in dir                     |
-|  -w   | --wallpaper        | wallpaper path                                         |
-|  -r   | --remove           | remove cached wallpaper corresponding to path          |
-|  -R   | --remove-all       | remove all cached wallpaper                            |
+| short | long               | description                                                               |
+| :---: | :----------------: | :-------------------------------------------:                             |
+| -h    | --help             | show this help message and exit                                           |
+| -s    | --refresh-rate     | interval of check                                                         |
+| -q    | --quiet            | no print                                                                  |
+| -a    | --animation        | add 'animation' (experimental) / deactivate blur on gifs                  |
+| -n    | --window-number    | WINDOW_NUMBER number of window before blur                                |
+| -b    | --backend          | BACKEND backend to display wallpaper could be feh or hsetroot default=feh |
+| -c    | --create-cache     | create cleacache without launching                                        |
+| -C    | --create-cache-dir | create cache for every file in dit                                        |
+| -w    | --wallpaper        | wallpaper path(gif still experimental)                                    |
+| -r    | --remove           | remove cached wallpaper corresponding to path                             |
+| -R    | --remove-all       | remove all cached wallpaper                                               |
