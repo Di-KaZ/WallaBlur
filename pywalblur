@@ -139,7 +139,7 @@ def loop_blur_w(wallpaper_path, sleeptime, animation, win_num, backend):
     walls_path = os.path.join(const_cachedir, os.path.splitext(os.path.basename(wallpaper_path))[0])
     subprocess.Popen(display_backend[backend](os.path.join(walls_path, os.path.splitext(os.path.basename(wallpaper_path))[0] + "0.png")), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     while True:
-        if getWindowOnActiveDesktop() == win_num:
+        if getWindowOnActiveDesktop() >= win_num:
             if not blured:
                 anim_blur_w(walls_path, wallpaper_path, animation, backend)
                 blured = True
@@ -158,7 +158,7 @@ def loop_blur_g(wallpaper_path, sleeptime, animation, win_num):
         proc = subprocess.Popen(xwinwrap_gif(width, height, wallpaper_path), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         exit(0)
     while True:
-        if getWindowOnActiveDesktop() == win_num:
+        if getWindowOnActiveDesktop() >= win_num:
             if not blured:
                 proc.kill() if proc != None else 0
                 proc = subprocess.Popen(xwinwrap_gif(width, height, os.path.join(walls_path, os.path.splitext(os.path.basename(wallpaper_path))[0] + "blur.gif")), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
