@@ -48,8 +48,8 @@ Here is the list of avalible options:
 | -a    | --animation        | add 'animation' (experimental) / deactivate blur on gifs                  |
 | -n    | --window-number    | WINDOW_NUMBER number of window before blur                                |
 | -b    | --backend          | BACKEND backend to display wallpaper could be feh or hsetroot default=feh |
-| -c    | --create-cache     | create cleacache without launching                                        |
-| -C    | --create-cache-dir | create cache for every file in dit                                        |
+| -c    | --create-cache     | create cache without launching                                            |
+| -C    | --create-cache-dir | create cache for every file in directory                                  |
 | -w    | --wallpaper        | wallpaper path(gif still experimental)                                    |
 | -r    | --remove           | remove cached wallpaper corresponding to path                             |
 | -R    | --remove-all       | remove all cached wallpaper                                               |
