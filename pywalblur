@@ -211,7 +211,7 @@ if __name__ == "__main__":
         # get screen resolution
         screen = Display(':0').screen()
         width = screen.width_in_pixels
-        height = screen.heig/ht_in_pixels
+        height = screen.height_in_pixels
         create_cache(args.wallpaper)
         loop_blur(args.wallpaper, args.refresh_rate, args.animation, get_file_extention(args.wallpaper), args.window_number, args.backend)
     else:
