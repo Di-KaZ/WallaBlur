@@ -10,7 +10,8 @@ Dependencies
 
 Required :
 - Your window manager have to be [EWMH](https://en.wikipedia.org/wiki/Extended_Window_Manager_Hints) compliant for this to work.
-- [wmctrl](https://github.com/Conservatory/wmctrl)
+- [ewmh](https://pypi.org/project/ewmh/0.1.2/)
+- [python-xlib](https://github.com/python-xlib/python-xlib)
 - [imagemagick](https://github.com/ImageMagick/ImageMagick)
 
 For png, jpg, ect:

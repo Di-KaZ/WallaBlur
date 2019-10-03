@@ -2,21 +2,27 @@
 
 import os
 import argparse
-import time
+from ewmh import EWMH
+from time import sleep
 import sys
 import shutil
 import subprocess
 import signal
 import codecs
+from Xlib.display import Display
 
 
-# /!\ It surely a mess but it's my first time with python any advice would be welcome :)
 
-def get_current_workspace():
-    return os.popen("xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}'").read()
+ewmh = EWMH()
+def getWindowOnActiveDesktop():
+    window_number = 0
+    active_desktop = ewmh.getCurrentDesktop()
+    windows = ewmh.getClientList()
+    for window in windows:
+        if ewmh.getWmDesktop(window) == active_desktop:
+            window_number += 1
+    return window_number
 
-def get_window_number(workspace):
-    return os.popen(f"echo \"$(wmctrl -l)\" | awk -F\" \" \'{{print $2}}\' | grep -e {workspace}").read().count('\n')
 
 def delete_wallpaper_cache(arg):
     filename = os.path.splitext(os.path.basename(arg))[0]
@@ -60,16 +66,6 @@ def limits_refresh(arg):
     return f
 
 # Parser
-parser = argparse.ArgumentParser(description="Blur wallpaper on window open.")
-parser.add_argument('-s', '--refresh-rate', type=limits_refresh, metavar='', default=0.3, help="interval of check")
-parser.add_argument('-q', '--quiet', action='store_true', help="no print")
-parser.add_argument('-a', '--animation', action='store_true', help="add 'animation' (experimental) / deactivate blur on gifs")
-bluring_grp = parser.add_mutually_exclusive_group()
-bluring_grp.add_argument('-c', '--create-cache', type=str, metavar='',default=None, help="create cleacache without launching")
-bluring_grp.add_argument('-C', '--create-cache-dir', type=str, metavar='', help="create cache for every file in dit")
-bluring_grp.add_argument('-w', '--wallpaper', type=str, default=None, metavar='', help="wallpaper path(gif still experimental)")
-bluring_grp.add_argument('-r', '--remove', type=delete_wallpaper_cache, metavar='', help="remove cached wallpaper corresponding to path")
-bluring_grp.add_argument('-R', '--remove-all', action='store_true', help="remove all cached wallpaper")
 
 
 def get_file_extention(filepath):
@@ -130,7 +126,7 @@ def loop_blur_w(wallpaper_path, sleeptime, animation):
     walls_path = const_cachedir + "/" + os.path.splitext(os.path.basename(wallpaper_path))[0]
     subprocess.check_call(["hsetroot", "-cover", walls_path + "/" + os.path.splitext(os.path.basename(wallpaper_path))[0] + "0.png"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
     while True:
-        window_open = get_window_number(get_current_workspace())
+        window_open = getWindowOnActiveDesktop()
         if window_open:
             if not blured:
                 anim_blur_w(walls_path, wallpaper_path, animation)
@@ -139,7 +135,7 @@ def loop_blur_w(wallpaper_path, sleeptime, animation):
             if blured:
                 anim_unblur_w(walls_path, wallpaper_path, animation)
                 blured = False
-        time.sleep(sleeptime)
+        sleep(sleeptime)
 
 def loop_blur_g(wallpaper_path, sleeptime, animation):
     blured = False
@@ -149,7 +145,7 @@ def loop_blur_g(wallpaper_path, sleeptime, animation):
         proc = subprocess.Popen("xwinwrap -ov -g %sx%s+0+0 -- mpv -wid WID %s --no-osc --no-osd-bar --loop-file --player-operation-mode=cplayer --no-audio --panscan=1.0 --no-input-default-bindings" %(width, height, wallpaper_path), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         exit(0)
     while True:
-        window_open = get_window_number(get_current_workspace())
+        window_open = getWindowOnActiveDesktop()
         if window_open:
             if not blured:
                 proc.kill() if proc != None else 0
@@ -160,7 +156,7 @@ def loop_blur_g(wallpaper_path, sleeptime, animation):
                 proc.kill() if proc != None else 0
                 proc = subprocess.Popen("xwinwrap -ov -g %sx%s+0+0 -- mpv -wid WID %s --no-osc --no-osd-bar --loop-file --player-operation-mode=cplayer --no-audio --panscan=1.0 --no-input-default-bindings" %(width, height, wallpaper_path), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
                 blured = False
-        time.sleep(sleeptime)
+        sleep(sleeptime)
 
 def loop_blur(wallpaper_path, sleeptime, animation, extention):
     if extention != ".gif":
@@ -170,14 +166,23 @@ def loop_blur(wallpaper_path, sleeptime, animation, extention):
 
 const_cachedir = os.getenv("HOME") + "/.cache/pywalblur"
 
-# if no arg just print help
-if len(sys.argv[1:]) == 0:
-    parser.print_usage()
-    parser.exit()
-
-args = parser.parse_args()
-
+print(ewmh.getDesktopViewPort())
 if __name__ == "__main__":
+    if len(sys.argv[1:]) == 0:
+        parser.print_usage()
+        parser.exit()
+    # Parser
+    parser = argparse.ArgumentParser(description="Blur wallpaper on window open.")
+    parser.add_argument('-s', '--refresh-rate', type=limits_refresh, metavar='', default=0.3, help="interval of check")
+    parser.add_argument('-q', '--quiet', action='store_true', help="no print")
+    parser.add_argument('-a', '--animation', action='store_true', help="add 'animation' (experimental) / deactivate blur on gifs")
+    bluring_grp = parser.add_mutually_exclusive_group()
+    bluring_grp.add_argument('-c', '--create-cache', type=str, metavar='',default=None, help="create cleacache without launching")
+    bluring_grp.add_argument('-C', '--create-cache-dir', type=str, metavar='', help="create cache for every file in dit")
+    bluring_grp.add_argument('-w', '--wallpaper', type=str, default=None, metavar='', help="wallpaper path(gif still experimental)")
+    bluring_grp.add_argument('-r', '--remove', type=delete_wallpaper_cache, metavar='', help="remove cached wallpaper corresponding to path")
+    bluring_grp.add_argument('-R', '--remove-all', action='store_true', help="remove all cached wallpaper")
+    args = parser.parse_args()
     if not os.path.exists(const_cachedir):
         os.mkdir(const_cachedir)
         print("Created cache directory in \'%s\'\n" % (const_cachedir) if not args.quiet else '', end='')
@@ -191,16 +196,9 @@ if __name__ == "__main__":
         create_cache_all(args.create_cache_dir, args.quiet)
     if args.wallpaper != None:
         # get screen resolution
-        cmd = ['xrandr']
-        cmd2 = ['grep', '*']
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
-        p.stdout.close()
-        resolution_string, junk = p2.communicate()
-        resolution = resolution_string.split()[0]
-        width, height = resolution.split(b'x')
-        width = codecs.decode(width, encoding='utf-8')
-        height = codecs.decode(height, encoding='utf-8')
+        screen = Display(':0').screen()
+        width = screen.width_in_pixels
+        height = screen.height_in_pixels
         create_cache(args.wallpaper)
         loop_blur(args.wallpaper, args.refresh_rate, args.animation, get_file_extention(args.wallpaper))
     else:
