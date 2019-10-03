@@ -40,9 +40,9 @@ display_backend = {
 
 def convert_img(src, dest, blur):
     if not blur:
-        return f"convert {src} {dest}"
+        return shlex.split(f"convert {src} {dest}")
     else:
-        return f"convert -blur 0x{blur} {src} {dest}"
+        return shlex.split(f"convert -blur 0x{blur} {src} {dest}")
 
 def delete_wallpaper_cache(arg):
     filename = os.path.splitext(os.path.basename(arg))[0]
@@ -72,7 +72,7 @@ def create_all_cache(arg, quiet):
     length = len(files)
     for i, file in enumerate(files, 1):
         print(f"file {i}/{length}" if not args.quiet else '')
-        create_cache(arg + file)
+        create_cache(os.path.join(arg + file))
     print(f"Finished processing {arg}\n" if not args.quiet else '', end='')
 
 def limits_refresh(arg):
@@ -94,7 +94,7 @@ def create_cache_gif(filepath, filename):
     else:
         os.mkdir(full_path)
         print(f"Generating cache for {filepath}\n" if not args.quiet else '')
-        subprocess.Popen(convert_img(filepath, full_path + "blur.gif", "4"), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        subprocess.Popen(convert_img(filepath, full_path + "blur.gif", "4"), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT).wait()
         print(f"Done !\n" if not args.quiet else '')
 
 def create_cache_non_gif(filepath, filename):
@@ -106,9 +106,9 @@ def create_cache_non_gif(filepath, filename):
         return
     else:
         os.mkdir(full_path)
-        subprocess.Popen(convert_img(filepath, os.path.join(full_path, filename + "0.png"), None), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        subprocess.Popen(convert_img(filepath, os.path.join(full_path, filename + "0.png"), None), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT).wait()
         for i in range(1, 6):
-            subprocess.Popen(convert_img(filepath, os.path.join(full_path, filename + str(i) + ".png"), blur_step[i - 1]), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            subprocess.Popen(convert_img(filepath, os.path.join(full_path, filename + str(i) + ".png"), blur_step[i - 1]), stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT).wait()
     print("Done !\n" if not args.quiet else '')
 
 def create_cache(filepath):
