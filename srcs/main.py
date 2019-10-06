@@ -5,6 +5,7 @@ import argparse
 import logging
 from pathlib import Path
 import cache
+import draw
 
 def limits_refresh(arg):
     try:
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     bluring_grp.add_argument('-R', '--remove-all', action='store_true', help="remove all cached wallpaper")
     parser.add_argument     ('-q', '--quiet', action='store_true', help="no output")
     parser.add_argument     ('-f', '--blur-strength', type=str, default="4", help="blur strength applied to cache")
-    parser.add_argument     ('-s', '--refresh-rate', type=limits_refresh, default=0.3, help="interval of main loop")
+    parser.add_argument     ('-s', '--refresh-rate', type=limits_refresh, default=0.1, help="interval of main loop")
     parser.add_argument     ('-n', '--window-number', type=int, default=1, help="number of window before blur")
     parser.add_argument     ('-b', '--backend', type=str, default="feh", help="backend to display wallpaper could be feh or hsetroot default=feh")
     parser.add_argument     ('-d', '-delete-original', action='store_true', help="remove original wallpaper")
@@ -48,7 +49,7 @@ if __name__ == "__main__":
         cache.generate_cache_directory(args, cachedir)
         exit(0)
     if args.create_cache:
-        cache.generate_cache(args, cachedir)
+        cache.generate_cache(Path(args.create_cache), cachedir, args)
         exit(0)
     # remove options
     if args.remove:
@@ -57,3 +58,6 @@ if __name__ == "__main__":
     if args.remove_all:
         cache.remove_cache_all(args, cachedir)
         exit(0)
+    # drawing background
+    if args.wallpaper:
+        draw.draw_loops(args, cachedir)

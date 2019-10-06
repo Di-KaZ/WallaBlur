@@ -32,8 +32,7 @@ def generate_cache_image(filepath, cachedir, blur):
     Popen(split(f"convert -blur 0x{blur} {filepath} {cachepath / blured}")).wait()
     logging.info("Done !")
 
-def generate_cache(args, cachedir):
-    filepath = PurePath(args.create_cache)
+def generate_cache(filepath, cachedir, args):
     if filepath.suffix == ".gif":
         generate_cache_gif(filepath, cachedir, args.blur_strength)
     else:
