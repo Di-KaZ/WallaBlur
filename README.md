@@ -1,9 +1,9 @@
-Pywalblur
+WallaBlur
 =========
 
 Blur Your backround when window are opened now with gif !
 
-![](https://github.com/Di-KaZ/pywalblur/blob/master/demo.gif)
+![](https://github.com/Di-KaZ/WallaBlur/blob/master/demo.gif)
 
 Dependencies
 ------------
@@ -11,7 +11,7 @@ Dependencies
 Required :
 - Your window manager have to be [EWMH](https://en.wikipedia.org/wiki/Extended_Window_Manager_Hints) compliant for this to work.
 - [imagemagick](https://github.com/ImageMagick/ImageMagick)
-In order to display background pywalblur use a background setter like these :
+In order to display background WallaBlur use a background setter like these :
 - [hsetroot](https://github.com/himdel/hsetroot)
 - [feh](https://github.com/derf/feh)
 
@@ -21,7 +21,7 @@ Installing
 ----------
 
 ```shell
-pip install pywalblur
+pip install WallaBlur
 ```
 
 Options

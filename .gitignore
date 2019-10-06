@@ -1,4 +1,6 @@
 __pycache__
 lol.sh
 20181228x2.gif
-pywalblur.egg-info
+WallaBlur.egg-info
+dist
+build
