@@ -30,16 +30,15 @@ if __name__ == "__main__":
     parser.add_argument     ('-s', '--refresh-rate', type=limits_refresh, default=0.1, help="interval of main loop")
     parser.add_argument     ('-n', '--window-number', type=int, default=1, help="number of window before blur")
     parser.add_argument     ('-b', '--backend', type=str, default="feh", help="backend to display wallpaper could be feh or hsetroot default=feh")
-    parser.add_argument     ('-d', '-delete-original', action='store_true', help="remove original wallpaper")
     args = parser.parse_args()
     # if no argument
     if len(sys.argv[1:]) == 0:
         parser.print_usage() # print usage
         parser.exit()
     if args.quiet:
-        logging.basicConfig(level=logging.WARN)
+        logging.basicConfig(format='%(message)s', level=logging.WARN)
     else:
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(format='%(message)s', level=logging.INFO)
     cachedir = Path(Path.home() / ".cache/Walanblur")
     if not cachedir.exists():
         cachedir.mkdir()

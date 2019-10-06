@@ -26,17 +26,13 @@ def draw_loop_img(args, cachedir):
     while True:
         if get_windows_number() >= args.window_number:
             if not is_blured:
-                Popen(backend.display_backend[args.backend](blured))
+                Popen(backend.display_backend[args.backend](blured), stdout=DEVNULL, stderr=STDOUT)
                 is_blured = True
         else:
             if is_blured:
-                Popen(backend.display_backend[args.backend](normal))            
+                Popen(backend.display_backend[args.backend](normal), stdout=DEVNULL, stderr=STDOUT)
                 is_blured = False
         sleep(args.refresh_rate)
-
-def sub_loop_gif(dirpath, filename, max_index, back, current_index):
-    img_path = Path(dirpath, filename.stem + "-" + str(current_index) + ".png")
-    Popen(backend.display_backend[back](img_path))
 
 def draw_loop_gif(args, cachedir):
     wall_path = Path(args.wallpaper)
@@ -53,7 +49,8 @@ def draw_loop_gif(args, cachedir):
         else:
             if current_path == blured:
                 current_path = normal
-        sub_loop_gif(current_path, wall_path, max_index, args.backend, current_index)
+        img_path = Path(current_path, wall_path.stem + "-" + str(current_index) + ".png")
+        Popen(backend.display_backend[args.backend](img_path), stdout=DEVNULL, stderr=STDOUT)
         current_index = current_index + 1 if current_index + 1 < max_index else 0
         sleep(args.refresh_rate)
 
