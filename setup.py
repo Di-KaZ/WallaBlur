@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", 'r') as f:
     long_description = f.read()
 
-setup(
+setuptools.setup(
     name='pywalblur',
     version='1.0',
     description='blr background on window opening',
