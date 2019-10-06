@@ -2,8 +2,9 @@ from ewmh import EWMH
 from time import sleep
 from subprocess import Popen, DEVNULL, STDOUT
 from pathlib import Path, PurePath
-import cache
-import backend
+
+from . import cache
+from . import backend
 
 ewmh = EWMH()
 

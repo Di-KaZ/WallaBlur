@@ -4,8 +4,9 @@ import os
 import argparse
 import logging
 from pathlib import Path
-import cache
-import draw
+
+from . import cache
+from . import draw
 
 def limits_refresh(arg):
     try:
@@ -16,8 +17,7 @@ def limits_refresh(arg):
         raise argparse.ArgumentTypeError("Argument must be 0 > [val] < 1 ")
     return f
 
-if __name__ == "__main__":
-    # PARSER
+def main():
     parser = argparse.ArgumentParser(description="Blur wallpaper on window open.")
     bluring_grp = parser.add_mutually_exclusive_group()
     bluring_grp.add_argument('-w', '--wallpaper', type=str, default=None, help="wallpaper path")
@@ -60,3 +60,6 @@ if __name__ == "__main__":
     # drawing background
     if args.wallpaper:
         draw.draw_loops(args, cachedir)
+
+if __name__ == "__main__":
+    main()
